@@ -4,7 +4,7 @@ from .models import Book
 def list_books(request):
     books = Book.objects.all()
 
-    context = {'list_books: books'}
+    context = {'books: books'}
     return render(request, 'books/list_books.html', context)
 
 from django.views.generic import DetailView
