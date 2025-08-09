@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from .models import Book
 
 def list_books(request):
-    books = Book.objects.select_related('author').all()
+    books = Book.objects.all()
     
     if not books:
         return HttpResponse("No books found.")
