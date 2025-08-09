@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.detail import DetailView
 from .models import Book
+from django.contrib.auth import login
 
 # Function-Based View: List all books
 def list_books(request):
