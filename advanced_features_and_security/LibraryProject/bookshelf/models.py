@@ -1,17 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.contrib.auth.models import UserManager
-from django.utils import timezone
+from django.contrib.auth.base_user import BaseUserManager
 from django.conf import settings
 
-
-# Create your models here.
-class Book(models.Model):
-    title = models.CharField(max_length = 200)
-    author = models.CharField(max_length = 100)
-    publication_year = models.IntegerField()
-
-class CustomUserManager(UserManager):
+class CustomUserManager(BaseUserManager):
     def create_user(self, username, email=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
@@ -34,14 +26,16 @@ class CustomUserManager(UserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-    
+
 class CustomUser(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
     profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
     objects = CustomUserManager()
 
+class Book(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=100)
+    publication_year = models.IntegerField()
 
 class MyModel(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-
