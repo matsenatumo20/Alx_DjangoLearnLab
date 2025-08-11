@@ -49,5 +49,20 @@ def delete_book(request, pk):
         return redirect('book_list')
     return render(request, 'delete_book.html', {'book': book})
 
+# Validate and sanitize user inputs
+from django.core.exceptions import ValidationError
+
+def search_books(request):
+    query = request.GET.get('q')
+    if query:
+        try:
+            books = Book.objects.filter(title__icontains=query)
+            return render(request, 'bookshelf/book_list.html', {'books': books})
+        except ValidationError as e:
+            # Handle validation error
+            pass
+    return render(request, 'bookshelf/book_list.html', {'books': []})
+
+
 
 

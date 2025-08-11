@@ -23,7 +23,48 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+7&%d(36he!$5fx(_(i&2$5ua3h*t0jwaf6mrg6@f!1hy95bl2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+
+# Configure secure browser-side protections
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Ensure cookies are sent over HTTPS only
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Other security settings
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 3600  # 1 hour
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Example CSP policy — tune to your resources (fonts, images, CDN, scripts)
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'",)               # add trusted script sources or 'nonce' usage
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")  # prefer avoiding 'unsafe-inline'
+CSP_IMG_SRC = ("'self'", 'data:', 'https://images.example.com')
+CSP_FONT_SRC = ("'self'",)
+CSP_CONNECT_SRC = ("'self'",)
+CSP_BASE_URI = ("'self'",)
+
+# Logging security errors and exceptions
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {'class': 'logging.StreamHandler'},
+    },
+    'loggers': {
+        'django.security.*': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+    },
+}
+
 
 ALLOWED_HOSTS = []
 
@@ -39,6 +80,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookshelf.apps.BookshelfConfig',
     'relationship_app.apps.RelationshipAppConfig',
+    'csp',
 ]
 
 #Advanced_features_and_security
@@ -52,6 +94,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.ContentSecurityPolicyMiddleware',
+    'LibraryProject.middleware.SimpleCSPMiddleware',
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
