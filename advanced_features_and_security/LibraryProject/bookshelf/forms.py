@@ -1,16 +1,17 @@
+# LibraryProject/bookshelf/forms.py
 from django import forms
-from .models import Book
+from .models import Book  # assuming you have a Book model
 
-class BookForm(forms.ModelForm):
+class ExampleForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['title', 'author']  # add fields you need
+        fields = ['title', 'author', 'description']  # adjust to your model fields
 
-class BookSearchForm(forms.Form):
-    q = forms.CharField(max_length=200, required=False)
+    # Extra validation example to avoid unsafe input
+    def clean_title(self):
+        title = self.cleaned_data.get('title', '')
+        if "<script>" in title.lower():
+            raise forms.ValidationError("Invalid input detected.")
+        return title
 
-    def clean_q(self):
-        q = self.cleaned_data.get('q', '')
-        # optional additional validation/sanitization here
-        return q
 
