@@ -2,7 +2,8 @@
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render, redirect
 from .models import Book
-from .forms import BookForm, ExampleForm  # ✅ Added ExampleForm import
+from .forms import BookForm
+from .forms import ExampleForm  # ✅ Added ExampleForm import
 from django.views.decorators.csrf import csrf_protect  # ✅ For CSRF protection
 from django.core.exceptions import ValidationError
 
