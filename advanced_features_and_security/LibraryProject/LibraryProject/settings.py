@@ -40,6 +40,9 @@ SECURE_HSTS_SECONDS = 31536000 # Instruct browsers to only access the site via H
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
+# Configure Django to trust the X-Forwarded-Proto header sent by the proxy server
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # Content Security Policy settings
 CSP = {
     'DEFAULT_SRC': ["'self'"],
