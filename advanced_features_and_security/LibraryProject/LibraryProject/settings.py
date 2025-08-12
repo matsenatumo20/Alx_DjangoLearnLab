@@ -26,9 +26,9 @@ SECRET_KEY = 'django-insecure-+7&%d(36he!$5fx(_(i&2$5ua3h*t0jwaf6mrg6@f!1hy95bl2
 DEBUG = False
 
 # Configure secure browser-side protections
-SECURE_BROWSER_XSS_FILTER = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True # Enable the browser's XSS filtering
+X_FRAME_OPTIONS = 'DENY' # Prevent clickjacking
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent browsers from MIME-sniffing a response away from the declared content-type
 
 # Ensure cookies are sent over HTTPS only
 CSRF_COOKIE_SECURE = True
@@ -36,18 +36,20 @@ SESSION_COOKIE_SECURE = True
 
 # Other security settings
 SECURE_SSL_REDIRECT = True
-SECURE_HSTS_SECONDS = 3600  # 1 hour
+SECURE_HSTS_SECONDS = 31536000 # Instruct browsers to only access the site via HTTPS for 1 year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
-# Example CSP policy — tune to your resources (fonts, images, CDN, scripts)
-CSP_DEFAULT_SRC = ("'self'",)
-CSP_SCRIPT_SRC = ("'self'",)               # add trusted script sources or 'nonce' usage
-CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")  # prefer avoiding 'unsafe-inline'
-CSP_IMG_SRC = ("'self'", 'data:', 'https://images.example.com')
-CSP_FONT_SRC = ("'self'",)
-CSP_CONNECT_SRC = ("'self'",)
-CSP_BASE_URI = ("'self'",)
+# Content Security Policy settings
+CSP = {
+    'DEFAULT_SRC': ["'self'"],
+    'SCRIPT_SRC': ["'self'"],
+    'STYLE_SRC': ["'self'", "'unsafe-inline'"],
+    'FONT_SRC': ["'self'"],
+    'CONNECT_SRC': ["'self'"],
+    'BASE_URI': ["'self'"],
+}
+
 
 # Logging security errors and exceptions
 LOGGING = {
@@ -66,7 +68,7 @@ LOGGING = {
 }
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -80,7 +82,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookshelf.apps.BookshelfConfig',
     'relationship_app.apps.RelationshipAppConfig',
-    'csp',
 ]
 
 #Advanced_features_and_security
@@ -94,8 +95,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'csp.middleware.ContentSecurityPolicyMiddleware',
-    'LibraryProject.middleware.SimpleCSPMiddleware',
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'

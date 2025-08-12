@@ -80,7 +80,3 @@ def example_form_view(request):
 
 
 
-
-
-
-
