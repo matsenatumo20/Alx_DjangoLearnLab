@@ -1,0 +1,8 @@
+<!-- profile.html -->
+<h1>Profile</h1>
+<p>Email: {{ user.email }}</p>
+<form method="post">
+    {% csrf_token %}
+    <input type="email" name="email" value="{{ user.email }}">
+    <button type="submit">Update Email</button>
+</form>
