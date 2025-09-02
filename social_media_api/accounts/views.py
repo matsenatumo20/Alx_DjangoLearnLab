@@ -9,6 +9,7 @@ from .serializers import RegisterSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework import permissions
+from .models import CustomUser
 
 User = get_user_model()
 
@@ -58,9 +59,7 @@ class UnfollowView(APIView):
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-class UserList(generics.ListAPIView):
+class UserList(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
     serializer_class = RegisterSerializer
-
-
