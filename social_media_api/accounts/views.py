@@ -10,6 +10,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework import permissions
 from django.contrib.auth import get_user_model
+from .models import CustomUser
+
 
 User = get_user_model()
 
@@ -58,9 +60,10 @@ class UnfollowView(APIView):
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
-class UserList(generics.GenericAPIView):
+class UserList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
+    serializer_class = RegisterSerializer
 
 
 
