@@ -7,6 +7,10 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from .serializers import RegisterSerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics
+from rest_framework import permissions
+from django.contrib.auth import get_user_model
+from .serializers import UserSerializer
 
 User = get_user_model()
 
@@ -54,5 +58,15 @@ class UnfollowView(APIView):
             return Response(status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+        
+class UserList(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        current_user = self.request.user
+        followed_users = current_user.following.all()
+        return User.objects.exclude(id__in=[current_user.id] + list(followed_users.values_list('id', flat=True)))
+
 
 
