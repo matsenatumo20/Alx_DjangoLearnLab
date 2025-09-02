@@ -7,6 +7,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework import filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import generics
+
 
 # Create your views here.
 class IsAuthorOrReadOnly(IsAuthenticatedOrReadOnly):
@@ -39,12 +41,10 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-class FeedView(APIView):
+class FeedView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = PostSerializer
 
-    def get(self, request):
-        followed_users = request.user.following.all()
-        posts = Post.objects.filter(author__in=followed_users).order_by('-created_at')
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data)
-
+    def get_queryset(self):
+        followed_users = self.request.user.following.all()
+        return Post.objects.filter(author__in=followed_users).order_by('-created_at')
