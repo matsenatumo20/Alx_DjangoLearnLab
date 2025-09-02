@@ -1,0 +1,22 @@
+# Social Media API
+
+This is a social media API built using Django and Django REST Framework. The API provides endpoints for user registration, login, and profile management.
+
+## Setup
+1. Install the required packages: `pip install django djangorestframework`
+2. Run migrations: `python manage.py migrate`
+3. Start the development server: `python manage.py runserver`
+
+## Endpoints
+* `POST /api/accounts/register/`: Register a new user
+* `POST /api/accounts/login/`: Login an existing user
+
+## User Model
+The user model has the following fields:
+
+* `id`: Unique identifier for the user
+* `username`: Username chosen by the user
+* `email`: Email address of the user
+* `bio`: Bio of the user
+* `profile_picture`: Profile picture of the user
+* `followers`: List of users who follow this user
