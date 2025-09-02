@@ -9,9 +9,6 @@ from .serializers import RegisterSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework import permissions
-from django.contrib.auth import get_user_model
-from .models import CustomUser
-
 
 User = get_user_model()
 
@@ -26,7 +23,8 @@ class RegisterView(APIView):
 
 class LoginView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
@@ -59,12 +57,10 @@ class UnfollowView(APIView):
             return Response(status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
 class UserList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = CustomUser.objects.all()
+    queryset = User.objects.all()
     serializer_class = RegisterSerializer
-
-
 
 
